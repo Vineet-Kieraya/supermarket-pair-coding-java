@@ -1,0 +1,86 @@
+In this exercise, we'll implement the supermarket checkout functionality.
+In a supermarket, items in an order are identified through Stock Keeping Unit or SKUs, but for simplicity, we'll use alphabets (like A, B, C and so on). The items are priced individually - each item has a specific price.
+But, some items have a special price - order n of them and they'll now cost y rupees. For example, item A might cost 90 rupees individually, but this week, we'll roll out a campaign: buy 3 items of A and they'll now cost 250 rupees.
+
+This current week's prices for items in the super market are:
+
+|===
+| Item | Unit Price | Special Price
+| A    | 90         | 3 for 250
+| B    | 10         | 2 for 17
+| C    | 15         |
+| D    | 75         |
+|===
+
+
+The checkout of items can be done in any order. If a customer orders 3 'A's and 2 'B's, then the items can be scanned in several variations - [ B, A, B, A, A ] or [ A, A, B, A, B ] or any variant of these. So, irrespective of what order the items are being scanned, we'll recognize the 3 'A's and price them at 250, and 2 'B's and price them at 17, for total order checkout value of 267.
+
+The pricing can change frequently, so the pricing rules will be provided to the Checkout API everything a scan is started.
+
+The interface to the checkout should look like:
+
+[source,java]
+----
+Checkout co = new Checkout(rules);
+co.scan(item1);
+co.scan(item2);
+co.scan(item3);
+...
+...
+co.total();
+----
+
+Following are a set of unit tests that will test the implementation. It contains a helper method price to read a sequence of items, calling the checkout's scan method on each item in the sequence, before computing and returning the total price of the order.
+
+[source,java]
+----
+public class CheckoutTests {
+
+
+    private static final List<String> RULES = new ArrayList<>();
+
+    @BeforeEach
+    void setUp() {
+    }
+
+    int price(String items) {
+        Checkout co = new Checkout(RULES);
+        for(int i = 0; i < items.length(); i++) {
+            String item = String.valueOf(items.charAt(i));
+            co.scan(item);
+        }
+        return co.total();
+    }
+
+    @Test
+    void testTotals() {
+        assertEquals(0, price(""));
+        assertEquals(50, price("A"));
+        assertEquals(80, price("AB"));
+        assertEquals(115, price("CDBA"));
+
+        assertEquals(100, price("AA"));
+        assertEquals(130, price("AAA"));
+        assertEquals(180, price("AAAA"));
+        assertEquals(230, price("AAAAA"));
+        assertEquals(260, price("AAAAAA"));
+
+        assertEquals(160, price("AAAB"));
+        assertEquals(175, price("AAABB"));
+        assertEquals(190, price("AAABBD"));
+        assertEquals(190, price("DABABA"));
+    }
+
+    @Test
+    void testIncrementals() {
+        Checkout co = new Checkout(RULES);
+        assertEquals(0, co.total());
+        co.scan("A");  assertEquals(50, co.total());
+        co.scan("B");  assertEquals(80, co.total());
+        co.scan("A");  assertEquals(130, co.total());
+        co.scan("A");  assertEquals(160, co.total());
+        co.scan("B");  assertEquals(175, co.total());
+    }
+}
+----
+
