@@ -1,19 +1,19 @@
 In this exercise, we'll implement the supermarket checkout functionality.
 In a supermarket, items in an order are identified through Stock Keeping Unit or SKUs, but for simplicity, we'll use alphabets (like A, B, C and so on). The items are priced individually - each item has a specific price.
-But, some items have a special price - order n of them and they'll now cost y rupees. For example, item A might cost 90 rupees individually, but this week, we'll roll out a campaign: buy 3 items of A and they'll now cost 250 rupees.
+But, some items have a special price - order n of them and they'll now cost y rupees. For example, item A might cost 50 rupees individually, but this week, we'll roll out a campaign: buy 3 items of A and they'll now cost 130 rupees.
 
 This current week's prices for items in the super market are:
 
 |===
 | Item | Unit Price | Special Price
-| A    | 90         | 3 for 250
-| B    | 10         | 2 for 17
-| C    | 15         |
-| D    | 75         |
+| A    | 50         | 3 for 130
+| B    | 30         | 2 for 45
+| C    | 20         |
+| D    | 15         |
 |===
 
 
-The checkout of items can be done in any order. If a customer orders 3 'A's and 2 'B's, then the items can be scanned in several variations - [ B, A, B, A, A ] or [ A, A, B, A, B ] or any variant of these. So, irrespective of what order the items are being scanned, we'll recognize the 3 'A's and price them at 250, and 2 'B's and price them at 17, for total order checkout value of 267.
+The checkout of items can be done in any order. If a customer orders 3 'A's and 2 'B's, then the items can be scanned in several variations - [ B, A, B, A, A ] or [ A, A, B, A, B ] or any variant of these. So, irrespective of what order the items are being scanned, we'll recognize the 3 'A's and price them at 130, and 2 'B's and price them at 45, for total order checkout value of 175.
 
 The pricing can change frequently, so the pricing rules will be provided to the Checkout API everything a scan is started.
 
